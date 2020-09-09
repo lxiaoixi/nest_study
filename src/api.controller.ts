@@ -1,12 +1,18 @@
-import { Controller, Get, Post, Req, Body } from "@nestjs/common";
+import { Controller, Get, Post, Req, Body, Param } from "@nestjs/common";
 import { Request } from 'express';
 
 @Controller('api')
 export class ApiController {
   @Get()
-  findAll(): string {
+  Index(): string {
     return 'the action returns all list'
   }
+
+  @Get('list') 
+  async findAll(): Promise<any> {  // async 返回值是Promise
+    return "return promise"
+  }
+
   
   @Get('item')
   fingItmeList(): string {
@@ -14,9 +20,10 @@ export class ApiController {
   }
 
   @Get(':id')
-  findById(@Req() req: Request): string {
+  findById(@Req() req: Request, @Param() params): string {
     console.log(req.params)  // 获取请求对象req
     console.log(req.query)
+    console.log(params.id)
     return 'this action returns item by id'
   }
 

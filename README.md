@@ -20,3 +20,6 @@ module.ts: 模块
 @Query() @Param() @Body() @Headers() @Session() @Ip()
 
 @HttpCode 可修改http状态码
+
+@Header(): 设置响应头
+@Redirect(url, statusCode): 重定向，跳转, 可以方法动态返回{ url, statusCode}
