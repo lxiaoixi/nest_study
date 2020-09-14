@@ -1,5 +1,5 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 import { UserModule } from './users/user.module';
 import { AppController } from './app.controller';
@@ -8,6 +8,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { AllExceptionFilter } from './common/filters/any-exception.filter';
 import { ValidationPipe } from './common/pipes/validate.pipe';
 import { AuthGuard } from './common/guards/auth.guard';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 @Module({
   imports: [UserModule],
@@ -25,6 +26,10 @@ import { AuthGuard } from './common/guards/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor
     }
   ],
 })

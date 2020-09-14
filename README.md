@@ -34,6 +34,10 @@
 * @Redirect(url, statusCode): 重定向，跳转, 可以方法动态返回{ url, statusCode}
 * @HttpCode 可修改http状态码
 
+中间件 --> 守卫 --> 拦截器开始 --> 管道 --> controller --> 拦截器结束
+
+      异常处理
+
 ## 中间件 middleware
 
 1. 中间件类需要实现NestMiddleware接口
@@ -112,3 +116,7 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 4. 设置全局范围的守卫：在app.module.ts中， providers中添加APP_GUARD
 5. 通过`@SetMetadata()` 装饰器将自定义的元数据附加到路由处理程序, 在守卫中使用`Reflector`帮助类来访问路由通过`SetMetadata`定义的元数据，与实际做对比，来决定守卫的返回值。
 6. 由守卫抛出的异常最后都由异常层(异常过滤器)处理
+
+## 拦截器
+
+可设置拦截器作用域级别：方法范围、控制器范围或全局范围

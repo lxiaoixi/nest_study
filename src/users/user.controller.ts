@@ -1,8 +1,9 @@
 import { PersonService } from './service/person.service';
 import { PersonDto } from './dto/person.dto';
-import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata } from "@nestjs/common";
+import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata, UseInterceptors } from "@nestjs/common";
 import { Request } from 'express';
 import { Person } from './interfaces/person.interface';
+import { LoggingInterceptor } from 'src/common/interceptors/logging.interceptor';
 
 @Controller('api')
 export class UserController {
@@ -36,6 +37,7 @@ export class UserController {
   }
 
   @Post('user')
+  @UseInterceptors(LoggingInterceptor)
   create(@Body() personDto: PersonDto): string {
     console.log(personDto)
     console.log(personDto.name)
