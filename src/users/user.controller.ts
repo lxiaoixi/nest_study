@@ -1,6 +1,6 @@
 import { PersonService } from './service/person.service';
 import { PersonDto } from './dto/person.dto';
-import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException } from "@nestjs/common";
+import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata } from "@nestjs/common";
 import { Request } from 'express';
 import { Person } from './interfaces/person.interface';
 
@@ -9,21 +9,25 @@ export class UserController {
   constructor(private personService: PersonService) {} // 基于构造函数的注入
 
   @Get()
+  @SetMetadata('ignoreAuthGuard', true)
   Index(): string {
     return 'the action returns all list'
   }
 
   @Get('list') 
+  @SetMetadata('ignoreAuthGuard', true)
   async findAll(): Promise<any> {  // async 返回值是Promise
     return "return promise"
   }
 
   @Get('user')
+  @SetMetadata('ignoreAuthGuard', true)
   async fingUserList(): Promise<Person[]> {
     return this.personService.findAll();
   }
 
   @Get(':id')
+  @SetMetadata('ignoreAuthGuard', true)
   findById(@Req() req: Request, @Param() params): string {
     console.log(req.params)  // 获取请求对象req
     console.log(req.query)
@@ -44,7 +48,7 @@ export class UserController {
   }
 
   @Put('user/:id')
-  update(@Param('id') id: string, @Body() updateDto: PersonDto) {
+  update(@Param('id', ParseIntPipe) id, @Body() updateDto: PersonDto) {
 
     console.log(id)
     console.log(updateDto)

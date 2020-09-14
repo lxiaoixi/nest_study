@@ -37,7 +37,7 @@ app.module.ts: 根模块, 引入整个服务的所有模块
 @Redirect(url, statusCode): 重定向，跳转, 可以方法动态返回{ url, statusCode}
 @HttpCode 可修改http状态码
 
-# 中间件
+## 中间件 middleware
 
 1.中间件类需要实现NestMiddleware接口
 2.包含中间件的模块必须实现NestModule接口， 必须使用模块类的configure() 方法来设置
@@ -59,7 +59,10 @@ export class AppModule implements NestModule {
 }
 ```
 
-# 异常处理 - 异常过滤器
+## 异常处理 - 异常过滤器 exception-filter
+
+> 异常过滤器，主要用来统一处理服务的异常错误。
+
 可设置过滤器作用域级别：方法范围，控制器范围或全局范围
 
 1.实现ExceptionFilter 接口
@@ -79,17 +82,34 @@ export class AppModule implements NestModule {
 }
 eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 
-# 管道
+## 管道 pipe
+
+> 主要用来做 参数校验、参数转换及自定义管道等
+
 可设置管道作用域级别：参数范围、方法范围、控制器范围或全局范围
 
-参数校验：对输入的参数进行校验
-转换：将输入数据转换为所需数据输出
+* 参数校验：对输入的参数进行校验
+* 转换：将输入数据转换为所需数据输出(参数转换处理、参数默认值、自定义管道-UserByIdPipe)
 
 1.实现PipeTransform接口
 2.提供transform() 方法
 3.@UsePipes() 绑定管道， 单个路由，控制器，
 4.参数校验：使用基于装饰器的验证 
   class-validator class-transformer
-5.参数校验的dto使用class-validator的校验规则注解
+5.参数校验的dto使用class-validator的校验规则注解,如: person.dto.ts
 6.设置全局范围的管道：在app.module.ts中， providers中添加APP_PIPE
 7.参数范围：如: @Body(ValidationPipe) createCatDto: CreateCatDto
+8.由管道抛出的异常最后都由异常层(异常过滤器)处理
+
+## 守卫
+
+> 主要用来做用户鉴权， 用户是否有访问权限， 如token校验， 用户身份、权限校验等
+
+可设置守卫作用域级别：方法范围、控制器范围或全局范围
+
+1.实现CanActivate接口
+2.必须实现一个canActivate()函数, 函数接收ExecutionContext实例(执行上下文)。函数返回布尔值
+3.@UseGuards() 绑定守卫， 单个路由，控制器
+4.设置全局范围的守卫：在app.module.ts中， providers中添加APP_GUARD
+5.通过`@SetMetadata()` 装饰器将自定义的元数据附加到路由处理程序, 在守卫中使用`Reflector`帮助类来访问路由通过`SetMetadata`定义的元数据，与实际做对比，来决定守卫的返回值。
+6.由守卫抛出的异常最后都由异常层(异常过滤器)处理
