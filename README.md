@@ -65,8 +65,9 @@ export class AppModule implements NestModule {
 1.实现ExceptionFilter 接口
 2.使用@Catch()装饰器, 参数列表为空，可捕获每一个未处理的异常
 3.使用catch()方法获取异常对象和ArgumentsHost对象
-4.@UseFilters() 绑定过滤器
-5.全局范围的过滤器：在app.module.ts中， providers中添加APP_FILTER, 加上@Catch()参数列表为空，可捕获服务所有类型异常
+4.@UseFilters() 绑定过滤器, 单个路由，控制器, 如：@UseFilters(HttpExceptionFilter)
+5.全局范围的过滤器：在app.module.ts中， providers中添加APP_FILTER, 可捕获服务所有类型异常
+6.错误地方抛出错误
 
 内置HttpException 结构
 {
@@ -78,3 +79,17 @@ export class AppModule implements NestModule {
 }
 eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 
+# 管道
+可设置管道作用域级别：参数范围、方法范围、控制器范围或全局范围
+
+参数校验：对输入的参数进行校验
+转换：将输入数据转换为所需数据输出
+
+1.实现PipeTransform接口
+2.提供transform() 方法
+3.@UsePipes() 绑定管道， 单个路由，控制器，
+4.参数校验：使用基于装饰器的验证 
+  class-validator class-transformer
+5.参数校验的dto使用class-validator的校验规则注解
+6.设置全局范围的管道：在app.module.ts中， providers中添加APP_PIPE
+7.参数范围：如: @Body(ValidationPipe) createCatDto: CreateCatDto
