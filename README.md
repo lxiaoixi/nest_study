@@ -34,7 +34,7 @@
 * @Redirect(url, statusCode): 重定向，跳转, 可以方法动态返回{ url, statusCode}
 * @HttpCode 可修改http状态码
 
-中间件 --> 守卫 --> 拦截器开始 --> 管道 --> controller --> 拦截器结束
+请求 --> 中间件 --> 守卫 --> 拦截器开始 --> 管道 --> controller --> 拦截器结束
 
       异常处理
 
@@ -59,6 +59,7 @@ export class AppModule implements NestModule {
   }
 }
 ```
+如：nest_study/src/common/middlewares/logger.middleware.ts 请求日志中间
 
 ## 异常处理 - 异常过滤器 exception-filter
 
@@ -85,6 +86,8 @@ export class AppModule implements NestModule {
 eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 ```
 
+如：nest_study/src/common/filters/any-exception.filter.ts  全局异常捕获过滤器
+
 ## 管道 pipe
 
 > 主要用来做 参数校验、参数转换及自定义管道等
@@ -104,7 +107,9 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 7. 参数范围：如: @Body(ValidationPipe) createCatDto: CreateCatDto
 8. 由管道抛出的异常最后都由异常层(异常过滤器)处理
 
-## 守卫
+如：nest_study/src/common/pipes/validate.pipe.ts  参数校验管道
+
+## 守卫 guard
 
 > 主要用来做用户鉴权， 用户是否有访问权限， 如token校验， 用户身份、权限校验等
 
@@ -114,9 +119,13 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 2. 必须实现一个canActivate()函数, 函数接收ExecutionContext实例(执行上下文)。函数返回布尔值
 3. @UseGuards() 绑定守卫， 单个路由，控制器
 4. 设置全局范围的守卫：在app.module.ts中， providers中添加APP_GUARD
-5. 通过`@SetMetadata()` 装饰器将自定义的元数据附加到路由处理程序, 在守卫中使用`Reflector`帮助类来访问路由通过`SetMetadata`定义的元数据，与实际做对比，来决定守卫的返回值。
+5. 通过`@SetMetadata()` 装饰器将自定义的元数据附加到路由处理程序, 在守卫中通过反射使用`Reflector`帮助类来访问路由通过`SetMetadata`定义的元数据，与实际做对比，来决定守卫的返回值。
 6. 由守卫抛出的异常最后都由异常层(异常过滤器)处理
 
-## 拦截器
+如： nest_study/src/common/guards/auth.guard.ts  token校验守卫
 
-可设置拦截器作用域级别：方法范围、控制器范围或全局范围
+## 拦截器 interceptor
+
+拦截器可以是控制器范围内的, 方法范围内的或者全局范围内的。
+
+

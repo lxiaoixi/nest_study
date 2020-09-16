@@ -3,7 +3,7 @@ import { PersonDto } from './dto/person.dto';
 import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata, UseInterceptors } from "@nestjs/common";
 import { Request } from 'express';
 import { Person } from './interfaces/person.interface';
-import { LoggingInterceptor } from 'src/common/interceptors/logging.interceptor';
+import { fstat } from 'fs';
 
 @Controller('api')
 export class UserController {
@@ -37,8 +37,8 @@ export class UserController {
   }
 
   @Post('user')
-  @UseInterceptors(LoggingInterceptor)
-  create(@Body() personDto: PersonDto): string {
+  async create(@Body() personDto: PersonDto): Promise<string> {
+    // await new Promise((resolve)=>{setTimeout(resolve, 5000)}) 测试请求超时异常处理
     console.log(personDto)
     console.log(personDto.name)
     if(personDto.name === 'test'){

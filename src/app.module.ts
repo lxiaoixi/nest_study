@@ -1,3 +1,4 @@
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
@@ -9,6 +10,7 @@ import { AllExceptionFilter } from './common/filters/any-exception.filter';
 import { ValidationPipe } from './common/pipes/validate.pipe';
 import { AuthGuard } from './common/guards/auth.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 @Module({
   imports: [UserModule],
@@ -29,7 +31,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor
+      useClass: ResponseInterceptor
     }
   ],
 })
