@@ -3,6 +3,7 @@ import { PersonDto } from './dto/person.dto';
 import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata, UseInterceptors } from "@nestjs/common";
 import { Request } from 'express';
 import { Person } from './interfaces/person.interface';
+import { BusinessException, errorType } from 'src/common/filters/business-exception';
 
 @Controller('api')
 export class UserController {
@@ -41,8 +42,9 @@ export class UserController {
     console.log(personDto)
     console.log(personDto.name)
     if(personDto.name === 'test'){
-      throw new UnauthorizedException({ code: 2001, message: '无权访问'})
+      //throw new UnauthorizedException({ code: 2001, message: '无权访问'})
       //throw new HttpException({ code: 2001, message: '无权访问'}, 403)
+      throw new BusinessException(errorType.ACCESS_DENIED, '无权访问')
     }
     this.personService.create(personDto)
     return 'add a new user'
