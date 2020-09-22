@@ -33,10 +33,13 @@
 * @Header(): 设置响应头
 * @Redirect(url, statusCode): 重定向，跳转, 可以方法动态返回{ url, statusCode}
 * @HttpCode 可修改http状态码
+* @Catch 捕获异常
+* @Inject() 注入
+* @Inject(REQUEST) 可在service层获取req对象
 
-请求 --> 中间件 --> 守卫 --> 拦截器开始 --> 管道 --> controller --> 拦截器结束
+客户请求 --> 中间件 --> 守卫 --> 拦截器开始 --> 管道 --> controller --> 拦截器结束
 
-      异常处理
+                       过滤器异常处理
 
 ## 中间件 middleware
 
@@ -100,7 +103,7 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 1. 实现PipeTransform接口
 2. 提供transform() 方法
 3. @UsePipes() 绑定管道， 单个路由，控制器，
-4. 参数校验：使用基于装饰器的验证 
+4. 参数校验：使用基于装饰器的验证， 配合class-validator实现装饰器验证 
   class-validator class-transformer
 5. 参数校验的dto使用class-validator的校验规则注解,如: person.dto.ts
 6. 设置全局范围的管道：在app.module.ts中， providers中添加APP_PIPE
@@ -128,4 +131,13 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 
 拦截器可以是控制器范围内的, 方法范围内的或者全局范围内的。
 
+1. 使用@Injectable()装饰器注解的类。
+2. 实现 NestInterceptor 接口
+3. 实现一个intercept()函数, 接收两个参数,第一个是 ExecutionContext 实例, 第二个参数是 CallHandler, 提供handle() 方法，返回一个 Observable, 可用来处理响应的数据
+4. @UseInterceptors() 绑定拦截器, 单个路由，控制器
+5. 设置全局范围的拦截器：在app.module.ts中， providers中添加APP_INTERCEPTOR
 
+## 配置文件
+
+应用程序通常在不同的环境中运行。根据环境的不同，应该使用不同的配置设置。
+在 Nest 中的一个好方法是创建一个 ConfigModule ，它暴露一个 ConfigService ，根据 $NODE_ENV 环境变量加载适当的 .config 文件。

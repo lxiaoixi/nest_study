@@ -3,7 +3,6 @@ import { PersonDto } from './dto/person.dto';
 import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata, UseInterceptors } from "@nestjs/common";
 import { Request } from 'express';
 import { Person } from './interfaces/person.interface';
-import { fstat } from 'fs';
 
 @Controller('api')
 export class UserController {

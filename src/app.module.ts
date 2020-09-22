@@ -2,7 +2,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
-import { UserModule } from './users/user.module';
+import { UserModule } from './modules/users/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
