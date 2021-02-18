@@ -1,3 +1,4 @@
+import { CreateDto } from './dto/create.dto';
 import { PersonService } from './service/person.service';
 import { PersonDto } from './dto/person.dto';
 import { Controller, Get, Post, Req, Body, Param, Put, Delete, UnauthorizedException, HttpException, ParseIntPipe, SetMetadata, UseInterceptors } from "@nestjs/common";
@@ -62,5 +63,11 @@ export class UserController {
   remove(@Param('id') id: string) {
     console.log(id)
     return `this action delete a ${id} user`
+  }
+
+  @Post('ceshi')
+  async ceshi(@Body() data: CreateDto) {
+    console.log(99999, data)
+    return 1
   }
 }

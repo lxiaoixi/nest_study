@@ -14,7 +14,13 @@
   @Module({
     imports:[] 引入模块
     controllers：[] 控制器
-    providers：[AppService, {provide, useClass}] 提供者
+    providers：[ 
+      AppService, 
+      { 
+        provide, 
+        useClass
+      }
+    ] 提供者
     exports：[] 模块共享,其他模块imports该模块的均可以共享exports导出的实例
   })
   @Global() 全局模块, 使模块成为全局作用域,其他模块不用imports即可使用
@@ -29,13 +35,14 @@
 * @Delete
 * @Req: 将请求对象req注入到处理程序中 @Req() req: Request 或者直接使用@Request()
 * @Query() @Param() @Body() @Headers() @Session() @Ip(): 可使用dto方式接收数据 
-* @Res: 将请求对象res注入到处理程序中 @Res() req: Response 或者直接使用@Res()
+* @Res: 将请求对象res注入到处理程序中 @Res() res: Response 或者直接使用@Res()
 * @Header(): 设置响应头
 * @Redirect(url, statusCode): 重定向，跳转, 可以方法动态返回{ url, statusCode}
 * @HttpCode 可修改http状态码
 * @Catch 捕获异常
 * @Inject() 注入
 * @Inject(REQUEST) 可在service层获取req对象
+* @SetMetadata() 设置标签，将定制元数据附加到路由处理程序的能力
 
 客户请求 --> 中间件 --> 守卫 --> 拦截器开始 --> 管道 --> controller --> 拦截器结束
 
@@ -141,3 +148,46 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 
 应用程序通常在不同的环境中运行。根据环境的不同，应该使用不同的配置设置。
 在 Nest 中的一个好方法是创建一个 ConfigModule ，它暴露一个 ConfigService ，根据 $NODE_ENV 环境变量加载适当的 .config 文件。
+
+
+## 调试配置
+
+1.添加配置文件`.vscode/launch.json`，大致如下：
+```
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "nest_project",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/src/main.ts",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}
+
+```
+2. 建议使用vscode的`Nodejs(preview)`, 可以选择执行的脚本， 通过脚本进行调试
+
+![Alt text](https://docimg8.docs.qq.com/image/zY6Fv6UssXLvc6i3aqpEuw)
+![Alt text](https://docimg9.docs.qq.com/image/6q0xzhQT6UIPeoB5cVRKtQ)
+
+
+// TODO
+1.自定义装饰器了解
+2.配置文件按运行环境实现
+3.框架数据库(sequelize、mongodb等)集成
+4.redis集成
+5.日志集成
+6.第三方服务请求集成
+7.yapi生成

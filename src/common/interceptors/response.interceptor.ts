@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, RequestTimeoutException } from "@nestjs/common";
+import { CallHandler, ExecutionContext, HttpStatus, Injectable, NestInterceptor, RequestTimeoutException } from "@nestjs/common";
 import { Observable, throwError, TimeoutError } from "rxjs";
 import { map, catchError, timeout } from "rxjs/operators";
 
@@ -14,6 +14,8 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     console.log('this is response interceptor start')
     return next.handle().pipe(
       map(data=>{
+        // const response = context.switchToHttp().getResponse()
+        // response.status(200)
         const res = { code: 0, data, message: 'success'}
         console.log('http response...', res)
         return res;
