@@ -188,6 +188,6 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 2.配置文件按运行环境实现
 3.框架数据库(sequelize、mongodb等)集成
 4.redis集成
-5.日志集成
+5.日志集成（封装通用的日志参数方法， 如 requestId、timestamp等， 然后在不同地方只需添加当前日志的重要信息）
 6.第三方服务请求集成
 7.yapi生成

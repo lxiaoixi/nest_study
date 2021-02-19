@@ -11,9 +11,10 @@ import { ValidationPipe } from './common/pipes/validate.pipe';
 import { AuthGuard } from './common/guards/auth.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
+import { AsyncHooksModule } from './common/async-hooks/async-hooks.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [AsyncHooksModule, UserModule],
   controllers: [AppController],
   providers: [ 
     AppService,

@@ -1,3 +1,4 @@
+import { AsyncHooksService } from './../async-hooks/async-hooks.service';
 import { CallHandler, ExecutionContext, HttpStatus, Injectable, NestInterceptor, RequestTimeoutException } from "@nestjs/common";
 import { Observable, throwError, TimeoutError } from "rxjs";
 import { map, catchError, timeout } from "rxjs/operators";
@@ -10,6 +11,10 @@ interface Response<T> {
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
+  constructor(
+    private readonly asyncHooksService: AsyncHooksService
+  ){}
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
     console.log('this is response interceptor start')
     return next.handle().pipe(
@@ -17,10 +22,11 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
         // const response = context.switchToHttp().getResponse()
         // response.status(200)
         const res = { code: 0, data, message: 'success'}
-        console.log('http response...', res)
+        const requestId = this.asyncHooksService.requestId;
+        console.log(`[${requestId}] http response: ${JSON.stringify(res)}`)
         return res;
       }),
-      timeout(5000),
+      timeout(20000),
       catchError(err => {
         console.log('this is timeout interceptor catch error ')
         if(err instanceof TimeoutError) {

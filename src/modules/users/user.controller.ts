@@ -65,9 +65,15 @@ export class UserController {
     return `this action delete a ${id} user`
   }
 
-  @Post('ceshi')
-  async ceshi(@Body() data: CreateDto) {
-    console.log(99999, data)
+  @Get('ceshi/1')
+  @SetMetadata('ignoreAuthGuard', true)
+  async ceshi() {
+    //await this.timeout();
+    //console.log(99999)
     return 1
+  }
+
+  async timeout() {
+    return new Promise(resolve=>setTimeout(resolve, 10000));
   }
 }
