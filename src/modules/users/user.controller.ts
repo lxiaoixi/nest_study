@@ -68,7 +68,7 @@ export class UserController {
   @Get('ceshi/1')
   @SetMetadata('ignoreAuthGuard', true)
   async ceshi() {
-    //await this.timeout();
+    await this.timeout();
     //console.log(99999)
     return 1
   }

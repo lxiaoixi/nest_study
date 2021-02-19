@@ -23,7 +23,8 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
         // response.status(200)
         const res = { code: 0, data, message: 'success'}
         const requestId = this.asyncHooksService.requestId;
-        console.log(`[${requestId}] http response: ${JSON.stringify(res)}`)
+        const ts = Date.now() - this.asyncHooksService.ctx.req.beginTime;
+        console.log(`[${requestId}] cost[${ts}] http response: ${JSON.stringify(res)} `)
         return res;
       }),
       timeout(20000),
