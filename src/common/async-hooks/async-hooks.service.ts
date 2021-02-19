@@ -18,4 +18,7 @@ export class AsyncHooksService {
         return this.ctx.requestId;
     }
 
+    get req() {
+        return this.ctx.req;
+    }
 }
