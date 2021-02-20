@@ -74,6 +74,6 @@ export class UserController {
   }
 
   async timeout() {
-    return new Promise(resolve=>setTimeout(resolve, 10000));
+    return new Promise(resolve=>setTimeout(resolve, 3000));
   }
 }

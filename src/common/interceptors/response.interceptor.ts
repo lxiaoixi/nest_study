@@ -22,9 +22,14 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
         // const response = context.switchToHttp().getResponse()
         // response.status(200)
         const res = { code: 0, data, message: 'success'}
-        const requestId = this.asyncHooksService.requestId;
-        const ts = Date.now() - this.asyncHooksService.ctx.req.beginTime;
-        console.log(`[${requestId}] cost[${ts}] http response: ${JSON.stringify(res)} `)
+        // const requestId = this.asyncHooksService.requestId;
+        // const ts = Date.now() - this.asyncHooksService.ctx.req.beginTime;
+        // console.log(`[${requestId}] cost[${ts}] http response: ${JSON.stringify(res)} `)
+
+        // node 官方AsyncLocalStorage实现
+        const requestId = this.asyncHooksService.reqId;
+        const ts = Date.now() - this.asyncHooksService.store.req.beginTime;
+        console.log(`[${requestId}] http response: cost[${ts}] ${JSON.stringify(res)} `)
         return res;
       }),
       timeout(20000),

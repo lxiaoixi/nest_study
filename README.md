@@ -189,5 +189,19 @@ eg: throw new HttpException({ code: 2001, message: '无权访问'}, 403)
 3.框架数据库(sequelize、mongodb等)集成
 4.redis集成
 5.日志集成（封装通用的日志参数方法， 如 requestId、timestamp等， 然后在不同地方只需添加当前日志的重要信息）
+  requestId
+  timestamp
+  environment: process.env.NODE_ENV,
+  appName 项目名称
+  serverName: os.hostname()  服务器的 hostname, 用于区分不同的机器, 通过它很容易定位到出问题的服务器/容器。
+  event 事件类型： 如 access/response、mysql/mysql_error、redis/redis_error、request/request_res、
+  userId
+
+
 6.第三方服务请求集成
 7.yapi生成
+8. 使用async_hooks 实现日志链路追踪， 日志添加requestId请求唯一标识
+  https://www.npmjs.com/package/cls-hooked
+  https://cloud.tencent.com/developer/article/1661432
+
+  或者使用node官方的async_hooks的AsyncLocalStorage来实现

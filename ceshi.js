@@ -1,10 +1,26 @@
-let moduleName = 'package'
-let path = "/package";
-path = path.split(moduleName)[1] ? path.split(moduleName)[1] : path
+const http = require('http');
+const { AsyncLocalStorage } = require('async_hooks');
+const { randomBytes } = require('crypto')
 
-path = `/get` + path;
-const p = path.replace(/[\{\}:]/g, '').replace(/\/(.)/g, (str, $1) => {
-    return $1.toUpperCase();
-});
+const asyncLocalStorage = new AsyncLocalStorage();
 
-console.log(`${p}QueryDto`)
+function logWithId(msg) {
+  const ctx = asyncLocalStorage.getStore();
+  const {requestId, timestamp, req} = ctx;
+  console.log(requestId, timestamp, req.headers.token, msg)
+  // console.log(`${id !== undefined ? id : '-'}:`, msg);
+}
+
+http.createServer((req, res) => {
+  const requestId = randomBytes(16).toString('hex')
+  const context = { requestId, timestamp: Date.now(), req }
+
+  asyncLocalStorage.run(context, () => {
+    logWithId('start');
+    // Imagine any chain of async operations here
+    setImmediate(() => {
+      logWithId('finish');
+      res.end();
+    });
+  });
+}).listen(8080);
